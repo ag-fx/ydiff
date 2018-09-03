@@ -10,6 +10,7 @@ import java.io.File
 class MainView : View("ydiff") {
 
     init {
+        // Setup to remember window position
         runLater {
             preferences("ydiff") {
                 val maximized = getBoolean("maximized", false)
@@ -73,8 +74,8 @@ class MainView : View("ydiff") {
 
     override fun onDock() {
         with(root) {
-            var f1 = File("/Users/sixface/temp/code.right")
-            var f2 = File("/Users/sixface/temp/code.left")
+            var f1 = File("/Users/sixface/temp/code.left")
+            var f2 = File("/Users/sixface/temp/code.right")
             val dv = DiffView(f1, f2)
             center {
                 add(dv)
