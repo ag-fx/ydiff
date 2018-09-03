@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ydiff.iml" filepath="$PROJECT_DIR$/.idea/ydiff.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ydiff_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ydiff_main.iml" group="ydiff" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ydiff_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ydiff_test.iml" group="ydiff" />
     </modules>
   </component>
 </project>
