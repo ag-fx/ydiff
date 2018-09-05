@@ -1,6 +1,5 @@
 package com.yutiliti.ydiff.app
 
-import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
@@ -18,7 +17,9 @@ class Styles : Stylesheet() {
         }
 
         change {
-            backgroundColor += Color.YELLOWGREEN
+            backgroundColor += c("#ffff00")
+            fontWeight = FontWeight.BOLD
+
         }
     }
 }

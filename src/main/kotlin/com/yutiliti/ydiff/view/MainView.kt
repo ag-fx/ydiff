@@ -68,14 +68,12 @@ class MainView : View("ydiff") {
         bottom {
             // May be status bar
         }
-
-
     }
 
     override fun onDock() {
         with(root) {
-            var f1 = File("/Users/sixface/temp/code.left")
-            var f2 = File("/Users/sixface/temp/code.right")
+            val f1 = File("/Users/sixface/temp/code.left")
+            val f2 = File("/Users/sixface/temp/code.right")
             val dv = DiffView(f1, f2)
             center {
                 add(dv)
