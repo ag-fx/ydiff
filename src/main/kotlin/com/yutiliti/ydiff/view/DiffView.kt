@@ -23,6 +23,9 @@ class DiffView(private val file1: File, private val file2: File) : Fragment() {
 
     override val root = vbox {
         hbox(10) {
+            vboxConstraints {
+                margin = tornadofx.insets(5)
+            }
             label(controller.diffStat)
             separator(Orientation.VERTICAL)
             label("UTF-8")
@@ -67,12 +70,28 @@ class DiffView(private val file1: File, private val file2: File) : Fragment() {
         val patch = DiffUtils.diff<String>(content1, content2)
         for (delta in patch.deltas) {
             if (delta.type == DeltaType.CHANGE || delta.type == DeltaType.DELETE) {
-                for (i in 0 until delta.original.lines.size)
-                    leftArea.setParagraphStyle(delta.original.position + i, listOf("change"))
+                if (delta.original.lines.size == 1) {
+                    leftArea.setParagraphStyle(delta.original.position, listOf("change", "change_sole"))
+                } else {
+                    leftArea.setParagraphStyle(delta.original.position, listOf("change", "change_top"))
+                    for (i in 1 until delta.original.lines.size - 1) {
+                        leftArea.setParagraphStyle(delta.original.position + i, listOf("change"))
+                    }
+                    leftArea.setParagraphStyle(delta.original.position + delta.original.lines.size - 1,
+                            listOf("change", "change_bottom"))
+                }
             }
             if (delta.type == DeltaType.CHANGE || delta.type == DeltaType.INSERT) {
-                for (i in 0 until delta.revised.lines.size)
-                    rightArea.setParagraphStyle(delta.revised.position + i, listOf("change"))
+                if (delta.revised.lines.size == 1) {
+                    rightArea.setParagraphStyle(delta.revised.position, listOf("change", "change_sole"))
+                } else {
+                    rightArea.setParagraphStyle(delta.revised.position, listOf("change", "change_top"))
+                    for (i in 1 until delta.revised.lines.size - 1) {
+                        rightArea.setParagraphStyle(delta.revised.position + i, listOf("change"))
+                    }
+                    rightArea.setParagraphStyle(delta.revised.position + delta.revised.lines.size - 1,
+                            listOf("change", "change_bottom"))
+                }
             }
         }
     }
