@@ -3,9 +3,8 @@ package com.yutiliti.ydiff.view
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.application.Platform
-import javafx.scene.control.ButtonBar
+import javafx.geometry.Orientation
 import tornadofx.*
-import java.io.File
 
 class MainView : View("ydiff") {
 
@@ -54,14 +53,16 @@ class MainView : View("ydiff") {
                 menu("Help")
             }
 
-            buttonbar {
-                button(type = ButtonBar.ButtonData.LEFT, graphic = FontAwesomeIconView(FontAwesomeIcon.REFRESH))
-                button(type = ButtonBar.ButtonData.LEFT, graphic = FontAwesomeIconView(FontAwesomeIcon.SAVE))
-                button(type = ButtonBar.ButtonData.LEFT, graphic = FontAwesomeIconView(FontAwesomeIcon.UNDO))
-                button(type = ButtonBar.ButtonData.LEFT, graphic = FontAwesomeIconView(FontAwesomeIcon.EDIT))
-                button(type = ButtonBar.ButtonData.LEFT, graphic = FontAwesomeIconView(FontAwesomeIcon.ARROW_LEFT))
-                button(type = ButtonBar.ButtonData.LEFT, graphic = FontAwesomeIconView(FontAwesomeIcon.ARROW_RIGHT))
-                button(type = ButtonBar.ButtonData.LEFT, graphic = FontAwesomeIconView(FontAwesomeIcon.SEARCH))
+            toolbar {
+                button(graphic = FontAwesomeIconView(FontAwesomeIcon.REFRESH))
+                button(graphic = FontAwesomeIconView(FontAwesomeIcon.SAVE))
+                button(graphic = FontAwesomeIconView(FontAwesomeIcon.UNDO))
+                button(graphic = FontAwesomeIconView(FontAwesomeIcon.EDIT))
+                separator(Orientation.VERTICAL)
+                button(graphic = FontAwesomeIconView(FontAwesomeIcon.ARROW_LEFT))
+                button(graphic = FontAwesomeIconView(FontAwesomeIcon.ARROW_RIGHT))
+                separator(Orientation.VERTICAL)
+                button(graphic = FontAwesomeIconView(FontAwesomeIcon.SEARCH))
             }
         }
 
@@ -72,11 +73,8 @@ class MainView : View("ydiff") {
 
     override fun onDock() {
         with(root) {
-            val f1 = File("/Users/sixface/temp/code.left")
-            val f2 = File("/Users/sixface/temp/code.right")
-            val dv = DiffView(f1, f2)
             center {
-                add(dv)
+                add(DiffView())
             }
         }
     }

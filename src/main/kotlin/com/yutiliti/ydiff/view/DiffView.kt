@@ -1,35 +1,25 @@
 package com.yutiliti.ydiff.view
 
-import com.github.difflib.DiffUtils
 import com.github.difflib.patch.DeltaType
+import com.yutiliti.ydiff.app.MyApp
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Orientation
+import javafx.geometry.Pos
 import javafx.scene.layout.Priority
 import org.fxmisc.flowless.VirtualizedScrollPane
-import org.fxmisc.richtext.CodeArea
 import org.fxmisc.richtext.LineNumberFactory
+import org.fxmisc.richtext.StyleClassedTextArea
 import tornadofx.*
-import java.io.File
-import java.nio.file.Files
 
 
-class DiffView(private val file1: File, private val file2: File) : Fragment() {
+class DiffView : Fragment() {
 
     private val controller: DiffController by inject()
-    private val leftArea = CodeArea()
-    private val rightArea = CodeArea()
-    private lateinit var content1: List<String>
-    private lateinit var content2: List<String>
+    private val leftArea = StyleClassedTextArea()
+    private val rightArea = StyleClassedTextArea()
 
     override val root = vbox {
-        hbox(10) {
-            vboxConstraints {
-                margin = tornadofx.insets(5)
-            }
-            label(controller.diffStat)
-            separator(Orientation.VERTICAL)
-            label("UTF-8")
-        }
+
         hbox {
             leftArea.apply {
                 paragraphGraphicFactory = LineNumberFactory.get(this)
@@ -53,22 +43,26 @@ class DiffView(private val file1: File, private val file2: File) : Fragment() {
             vgrow = Priority.ALWAYS
             hgrow = Priority.ALWAYS
         }
-    }
 
-    init {
-        runAsync {
-            content1 = Files.readAllLines(file1.toPath())
-            content2 = Files.readAllLines(file2.toPath())
-        } success {
-            leftArea.replaceText(content1.joinToString("\n"))
-            rightArea.replaceText(content2.joinToString("\n"))
-            calculateStyles()
+        hbox(10) {
+            vboxConstraints {
+                margin = tornadofx.insets(5)
+                alignment = Pos.CENTER_RIGHT
+            }
+            label(controller.diffStat)
+            separator(Orientation.VERTICAL)
+            label("UTF-8")
         }
     }
 
+    init {
+        leftArea.replaceText(MyApp.data.leftValue)
+        rightArea.replaceText(MyApp.data.rightValue)
+        calculateStyles()
+    }
+
     private fun calculateStyles() {
-        val patch = DiffUtils.diff<String>(content1, content2)
-        for (delta in patch.deltas) {
+        for (delta in MyApp.data.patch.deltas) {
             if (delta.type == DeltaType.CHANGE || delta.type == DeltaType.DELETE) {
                 if (delta.original.lines.size == 1) {
                     leftArea.setParagraphStyle(delta.original.position, listOf("change", "change_sole"))
@@ -94,11 +88,11 @@ class DiffView(private val file1: File, private val file2: File) : Fragment() {
                 }
             }
         }
+        controller.diffStat.value = "${MyApp.data.patch.deltas.size} diffs"
     }
 }
 
 
 class DiffController : Controller() {
     val diffStat = SimpleStringProperty("1 diffs (ignore line ending differences)")
-
 }
